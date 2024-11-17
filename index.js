@@ -25,13 +25,13 @@ app.get("/api/hello", function (req, res) {
 app.get("/api/:date", function (req, res) {
   try {
     const input = req.params.date;
-    console.log("input ", input, input.trim() === "", !input);
+    console.log("input ", req.params, input.trim() === "", !input);
     // Attempt to parse the input as a number
     const numericTimestamp = Number(input);
     let date;
 
     // Handle numeric or numeric-like strings
-    if (!input || input.trim() === "") {
+    if (input.includes(":date") || input.trim() === "") {
       date = new Date();
     } else if (!isNaN(numericTimestamp)) {
       date = new Date(numericTimestamp);
@@ -50,6 +50,7 @@ app.get("/api/:date", function (req, res) {
     const utc = date.toUTCString();
     res.json({ unix: unix, utc: utc });
   } catch (error) {
+    console.error(error);
     res.json({ error: "Invalid Date" });
   }
 });
