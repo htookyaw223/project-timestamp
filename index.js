@@ -22,21 +22,30 @@ app.get("/", function (req, res) {
 app.get("/api/hello", function (req, res) {
   res.json({ greeting: "hello API" });
 });
-
 app.get("/api/:date", function (req, res) {
   try {
-    // If the input is a number or a string that can be converted to a number
-    const numericTimestamp = Number(req.params.date);
-    let date = new Date();
+    const input = req.params.date;
+
+    // Attempt to parse the input as a number
+    const numericTimestamp = Number(input);
+    let date;
+
+    // Handle numeric or numeric-like strings
     if (!isNaN(numericTimestamp)) {
-      date = new Date(numericTimestamp); // Handle numeric timestamps (milliseconds since epoch)
+      date = new Date(numericTimestamp);
     } else {
-      date = new Date(parseInt(req.params.date));
+      // Handle ISO date strings (e.g., YYYY-MM-DD)
+      date = new Date(input);
     }
 
-    console.log(date);
-    var unix = date.getTime();
-    var utc = date.toUTCString();
+    // Validate the date
+    if (isNaN(date.getTime())) {
+      throw new Error("Invalid Date");
+    }
+
+    // Generate the response
+    const unix = date.getTime();
+    const utc = date.toUTCString();
     res.json({ unix: unix, utc: utc });
   } catch (error) {
     res.json({ error: "Invalid Date" });
