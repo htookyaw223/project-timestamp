@@ -25,11 +25,16 @@ app.get("/api/hello", function (req, res) {
 
 app.get("/api/:date", function (req, res) {
   try {
-    console.log(req.params.date, "hello");
-    var date =
-      !req.params.date || req.params.date.trim() === ""
-        ? new Date()
-        : new Date(req.params.date * 1000);
+    // If the input is a number or a string that can be converted to a number
+    const numericTimestamp = Number(req.params.date);
+    let date = new Date();
+    if (!isNaN(numericTimestamp)) {
+      date = new Date(numericTimestamp); // Handle numeric timestamps (milliseconds since epoch)
+    } else {
+      date = new Date(parseInt(req.params.date));
+    }
+
+    console.log(date);
     var unix = date.getTime();
     var utc = date.toUTCString();
     res.json({ unix: unix, utc: utc });
