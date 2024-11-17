@@ -25,19 +25,21 @@ app.get("/api/hello", function (req, res) {
 app.get("/api/:date", function (req, res) {
   try {
     const input = req.params.date;
-
+    console.log("input ", input, input.trim() === "", !input);
     // Attempt to parse the input as a number
     const numericTimestamp = Number(input);
     let date;
 
     // Handle numeric or numeric-like strings
-    if (!isNaN(numericTimestamp)) {
+    if (!input || input.trim() === "") {
+      date = new Date();
+    } else if (!isNaN(numericTimestamp)) {
       date = new Date(numericTimestamp);
     } else {
       // Handle ISO date strings (e.g., YYYY-MM-DD)
       date = new Date(input);
     }
-
+    console.log("date ", date);
     // Validate the date
     if (isNaN(date.getTime())) {
       throw new Error("Invalid Date");
