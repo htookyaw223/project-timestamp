@@ -24,16 +24,27 @@ app.get("/api/hello", function (req, res) {
 });
 
 app.get("/api/:date", function (req, res) {
-  var date = req.params.date;
-  var dateRegex = /^(\d{4})-(\d{2})-(\d{2})$/;
-  if (dateRegex.test(date)) {
-    var unix = Date.parse(date);
-    var utc = new Date(unix).toUTCString();
+  // var dateRegex = /^(\d{4})-(\d{2})-(\d{2})$/;
+  // if (dateRegex.test(date)) {
+  //   var unix = Date.parse(date);
+  //   var utc = new Date(unix).toUTCString();
+  //   res.json({ unix: unix, utc: utc });
+  // } else {
+  //   var unix = Date.parse(date);
+  //   var utc = new Date(unix).toUTCString();
+  //   res.json({ unix: unix, utc: utc });
+  // }
+  try {
+    console.log(req.params.date, "hello");
+    var date =
+      !req.params.date || req.params.date.trim() === ""
+        ? new Date()
+        : new Date(req.params.date * 1000);
+    var unix = date.getTime();
+    var utc = date.toUTCString();
     res.json({ unix: unix, utc: utc });
-  } else {
-    var unix = Date.parse(date);
-    var utc = new Date(unix).toUTCString();
-    res.json({ unix: unix, utc: utc });
+  } catch (error) {
+    res.json({ error: "Invalid Date" });
   }
 });
 
