@@ -24,16 +24,6 @@ app.get("/api/hello", function (req, res) {
 });
 
 app.get("/api/:date", function (req, res) {
-  // var dateRegex = /^(\d{4})-(\d{2})-(\d{2})$/;
-  // if (dateRegex.test(date)) {
-  //   var unix = Date.parse(date);
-  //   var utc = new Date(unix).toUTCString();
-  //   res.json({ unix: unix, utc: utc });
-  // } else {
-  //   var unix = Date.parse(date);
-  //   var utc = new Date(unix).toUTCString();
-  //   res.json({ unix: unix, utc: utc });
-  // }
   try {
     console.log(req.params.date, "hello");
     var date =
